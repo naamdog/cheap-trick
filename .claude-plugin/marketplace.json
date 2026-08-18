@@ -1,0 +1,11 @@
+{
+  "name": "cheap-trick",
+  "owner": { "name": "Mike Naameh" },
+  "plugins": [
+    {
+      "name": "cheap-trick",
+      "source": "./",
+      "description": "Always-on supervisor for multi-step work - plans the split between what to keep and what to delegate to cheaper sub-agents, and stops to warn when delegating would lose session context - activates automatically via a UserPromptSubmit hook."
+    }
+  ]
+}

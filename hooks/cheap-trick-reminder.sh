@@ -1,0 +1,8 @@
+#!/bin/sh
+# Emits the cheap-trick UserPromptSubmit reminder as compact JSON.
+# macOS/Linux counterpart to cheap-trick-reminder.ps1 - see README.md
+# for how to point hooks/hooks.json at this script instead.
+
+msg='Cheap Trick (per the cheap-trick skill) is ALWAYS ON for multi-step work. Before the first tool call of any multi-step task, split it: KEEP stages that need judgement, are irreversible, or need session-specific context; DELEGATE bulky mechanical stages to a cheaper sub-agent (name the model tier or pinned grind/worker agent on every dispatch, and set effort explicitly); DO INLINE anything too small to justify a cold-start hand-off. CONTEXT WARNING: for each DELEGATE stage, ask if a fresh agent needs context it cannot see - if yes, keep it instead and tell the user in one line why (delegating would redo or miss session-specific context). Demand tight conclusions back, never transcripts. Review delegated output in proportion to stakes; never let unreviewed cheap-agent output settle a send, delete, deploy, or live-data write. SKIP entirely for one-line answers, single lookups, single edits, and conversation - the plan would cost more than the task. When it genuinely ran, end the response with one compact line, e.g. Cheap Trick: 3 stages -> 2 delegated (sonnet x2), 1 kept; or Cheap Trick: kept whole, needs session-specific context. Combine onto the shared Skills used line if other declaring skills also fired. State this only when genuinely run, never as decoration.'
+
+printf '{"hookSpecificOutput":{"hookEventName":"UserPromptSubmit","additionalContext":"%s"}}\n' "$msg"
