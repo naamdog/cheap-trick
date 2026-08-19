@@ -103,21 +103,37 @@ Four readers in parallel, briefed to return *findings with file:line citations, 
 
 Footer for that run: `Cheap Trick: 7 stages → 4 delegated (sonnet ×4), 2 kept, 1 inline`.
 
-## Declare it
+## Declare it — the run box
 
-Whenever Cheap Trick genuinely ran — a split was made and at least one stage was delegated or explicitly kept with a warning — end the response with one compact line naming what was delegated and to what:
-
-```
-Cheap Trick: 3 stages → 2 delegated (sonnet ×2), 1 kept
-```
-
-If nothing was delegated because the context warning fired, say that instead — it is the most useful thing the line can report:
+When Cheap Trick genuinely ran — a split was made, and at least one stage was delegated or explicitly kept because the context warning fired — add your row to the **run box** at the very end of the response. The box is a fenced code block, visually separate from the reply, with one row per skill that actually ran:
 
 ```
-Cheap Trick: kept whole — needs this session's context, delegating would redo it
+╭─────────────────────────────────────────────────
+│ SKILLS       simple-language · world-class
+│ CHEAP TRICK  5 stages → 1 delegated (haiku), 3 kept, 1 inline
+│ SMART METER  91% · bar 85% irreversible · clears · Opus/high
+╰─────────────────────────────────────────────────
 ```
 
-Combine with other declaring skills on the shared `Skills used:` line if those fire too. Only when genuinely run. Never as decoration.
+Your row is `CHEAP TRICK`. It reports the split, not a verdict:
+
+```
+│ CHEAP TRICK  5 stages → 1 delegated (haiku), 3 kept, 1 inline
+```
+
+When the context warning fired and nothing was delegated, say that instead — it is the most useful thing the row can report:
+
+```
+│ CHEAP TRICK  kept whole — needs this session's context
+```
+
+**Rules for the box:**
+
+- **One row per skill that genuinely ran. Omit the row entirely if it didn't.** A full box on a turn where one skill fired is a lie.
+- The box is a **shared container**, not any one skill's property. Other tools add their own rows. If you are the only one that ran, the box has one row.
+- **No right-hand border.** Deliberate: a box needing exact padding gets mis-padded eventually. Left rail only, and it renders correctly every time.
+- Always a fenced code block, always the last thing in the response — the receipt about the machinery, kept visibly apart from the answer itself.
+- Only when genuinely run. Never as decoration.
 
 ## Relationship to Smart Meter
 
