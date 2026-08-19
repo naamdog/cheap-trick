@@ -7,7 +7,7 @@ A Claude Code plugin that makes the top model supervise multi-step work instead 
 Ships a skill (`cheap-trick`) plus a `UserPromptSubmit` hook that reminds Claude, before the first tool call of any multi-step task, to plan the split:
 
 - KEEP stages that need judgement, are irreversible, or need context only this session has.
-- DELEGATE bulky, mechanical stages to a cheaper sub-agent - naming the model tier or the pinned `grind`/`worker` agent explicitly, with effort set explicitly, on every dispatch.
+- DELEGATE bulky, mechanical stages to a cheaper sub-agent - naming the model tier explicitly, with effort set explicitly, on every dispatch.
 - DO INLINE anything too small to justify a cold-start hand-off.
 - Before any DELEGATE step, run the CONTEXT WARNING check: if a fresh agent would need context it cannot see, that step gets kept instead of dispatched, and Claude tells the user in one plain line why.
 - Delegated work comes back as tight conclusions, never transcripts, and gets reviewed in proportion to stakes - a cheap agent's first pass never settles a send, delete, deploy, or live-data write on its own.
@@ -47,10 +47,6 @@ If you're on macOS or Linux, switch `hooks/hooks.json` over to the `.sh` script:
    ```
 
 `hooks.json` can't hold comments, which is why this note lives here instead.
-
-## Works with Smart Meter
-
-If [`smart-meter`](https://github.com/sjcaffery/smart-meter) (by Scott Caffery) is also installed, Cheap Trick dispatches to its pinned `grind`, `worker`, and `reviewer` agents instead of generic sub-agents. The two plugins compose rather than overlap: Smart Meter meters token spend and recommends when to economize; Cheap Trick plans the split and does the dispatching. One measures, the other decides and acts.
 
 ## License
 

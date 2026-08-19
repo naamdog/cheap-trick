@@ -24,7 +24,7 @@ Do **NOT** run it on:
 
 **The hand-off is not free.** A fresh sub-agent starts cold: its system prompt and tools re-cache from scratch. On a small task the cold start cancels the cheaper rate and the delegation nets zero or worse. Only delegate work that is **genuinely bulky** — many files, a long draft, a wide search, a real multi-step build. A handful of files or a quick transform: do it inline.
 
-*Where the numbers come from:* the measured findings behind this rule are Smart Meter's, not Cheap Trick's — a 10-file summarise delegated to the cheapest tier came out a dead heat with doing it inline; a from-scratch build pushed down one tier took ~4× the turns and netted only ~20% off. Cheap Trick inherits those measurements and does not claim its own. If you measure something different in your own work, trust your measurement and adjust the threshold.
+*Measure your own threshold.* Two effects set it, and they pull the same way: a cold start is a fixed cost that a small job cannot amortise, and a cheaper model that needs several times the turns re-reads the growing context on each one, so it can burn more in total than the dearer model would have. Where exactly that leaves the line depends on your work and your models. Watch what actually happens on a few delegations and move the threshold to fit — do not take a number on faith, including from this file.
 
 ## The loop
 
@@ -52,11 +52,11 @@ A sub-agent starts blank. It knows only what the brief tells it. If a stage depe
 
 Cheapest model that will finish in a *comparable number of turns*, not just the cheapest per-token. A cheap model that takes 4× the turns re-reads the growing context 4× and burns more, not less.
 
-- **Bulk, read-only, mechanical** → the cheapest tier (`haiku`, or the `grind` agent if Smart Meter is installed).
-- **Normal implementation from a clear spec, heavier reads, parallel investigation** → mid tier (`sonnet`, or the `worker` agent).
+- **Bulk, read-only, mechanical** → the cheapest tier available to you.
+- **Normal implementation from a clear spec, heavier reads, parallel investigation** → the mid tier.
 - **Anything that turned out to need judgement** → keep it, or send it up a tier. Never force a too-cheap agent through work it will fail.
 
-Set `effort` explicitly at dispatch: `low` for a deliberately cheap mechanical stage, higher for a hard verify. Omitting `model` on a dispatch silently inherits the top model — the expensive one — so always name the tier.
+If your setup provides pinned agent definitions (an agent whose model is fixed by its definition), prefer dispatching those over naming a raw model — a pin cannot be forgotten, an argument can. Set `effort` explicitly at dispatch: `low` for a deliberately cheap mechanical stage, higher for a hard verify. Omitting `model` on a dispatch silently inherits the top model — the expensive one — so always name the tier.
 
 ### 4. Brief tightly, demand a tight return
 
@@ -111,7 +111,7 @@ When Cheap Trick genuinely ran — a split was made, and at least one stage was 
 ╭─────────────────────────────────────────────────
 │ SKILLS       simple-language · world-class
 │ CHEAP TRICK  5 stages → 1 delegated (haiku), 3 kept, 1 inline
-│ SMART METER  91% · bar 85% irreversible · clears · Opus/high
+│ WORLD CLASS  7.0 → 8.5 · capped by evidence · 2 gaps closed
 ╰─────────────────────────────────────────────────
 ```
 
@@ -134,12 +134,6 @@ When the context warning fired and nothing was delegated, say that instead — i
 - **No right-hand border.** Deliberate: a box needing exact padding gets mis-padded eventually. Left rail only, and it renders correctly every time.
 - Always a fenced code block, always the last thing in the response — the receipt about the machinery, kept visibly apart from the answer itself.
 - Only when genuinely run. Never as decoration.
-
-## Relationship to Smart Meter
-
-If Scott Caffery's `smart-meter` plugin is installed, **use its pinned agents** (`grind`/haiku, `worker`/sonnet, `reviewer`/opus) rather than naming raw models — the pin guarantees the tier and its routing table is measured, not guessed. Cheap Trick adds the piece Smart Meter deliberately doesn't do: the **plan-first supervision loop and the context-warning stop**, run on every multi-step task by default. Smart Meter meters and recommends; Cheap Trick plans and dispatches. They compose; they don't overlap.
-
-Without Smart Meter, name the model tier directly on each dispatch. Same discipline, one less guarantee.
 
 ## Red flags — you are wasting money, not saving it
 
