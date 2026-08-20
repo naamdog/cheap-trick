@@ -1,6 +1,6 @@
 # Cheap Trick
 
-Cheap Trick routes work to the cheapest model that can finish it safely. The repository now ships two independent plugin packages so Codex and Claude Code can evolve without changing each other's instructions.
+Cheap Trick routes work to the cheapest model that can finish it safely. The repository ships independent plugin packages so Claude Code, Codex, and Grok Build can evolve without changing each other's instructions.
 
 ## Packages
 
@@ -8,17 +8,22 @@ Cheap Trick routes work to the cheapest model that can finish it safely. The rep
 cheap-trick/
 ├── .agents/plugins/marketplace.json    # Native Codex marketplace
 ├── .claude-plugin/marketplace.json     # Claude Code marketplace
+├── .grok-plugin/marketplace.json       # Grok Build marketplace
 ├── plugins/cheap-trick/                # Codex-only plugin
 │   ├── .codex-plugin/plugin.json
 │   ├── hooks/
 │   └── skills/cheap-trick/SKILL.md
-└── claude-code/                        # Claude Code-only plugin
-    ├── .claude-plugin/plugin.json
+├── claude-code/                        # Claude Code-only plugin
+│   ├── .claude-plugin/plugin.json
+│   ├── hooks/
+│   └── skills/cheap-trick/SKILL.md
+└── grok/                               # Grok Build-only plugin
+    ├── .grok-plugin/plugin.json
     ├── hooks/
     └── skills/cheap-trick/SKILL.md
 ```
 
-The Claude Code skill and hook are preserved unchanged inside `claude-code/`. The Codex package has its own manifest, hook, skill, model names, and tests.
+The Claude Code skill and hook are preserved unchanged inside `claude-code/`. The Codex package has its own manifest, hook, skill, model names, and tests. The Grok package routes to `grok-4.6` (keep) and `grok-4.5` (delegate via `spawn_subagent`).
 
 ## What the Codex package does
 
@@ -59,6 +64,26 @@ Start a new Codex thread after installing or updating so the new skill and hook 
 
 The checked-in hook configuration targets Windows PowerShell. On macOS or Linux, replace its command with `"${CLAUDE_PLUGIN_ROOT}/hooks/cheap-trick-reminder.sh"`; the matching POSIX script ships in the same folder.
 
+## Install for Grok Build
+
+```powershell
+grok plugin marketplace add naamdog/cheap-trick
+grok plugin install cheap-trick --trust
+```
+
+Or install it with the other naamdog Grok plugins from one marketplace:
+
+```powershell
+grok plugin marketplace add naamdog/grok-plugins
+grok plugin install cheap-trick --trust
+```
+
+Start a new Grok session after installing. Trust the hook when Grok asks; an untrusted hook cannot run on every prompt.
+
+The Grok package keeps judgement on `grok-4.6` and dispatches grind to `grok-4.5` with `spawn_subagent`. It does not use Claude or Codex model names.
+
+Its checked-in hook targets Windows PowerShell. On macOS or Linux, replace the command in `grok/hooks/hooks.json` with `"${GROK_PLUGIN_ROOT}/hooks/cheap-trick-reminder.sh"`.
+
 ## Install for Claude Code
 
 ```text
@@ -78,6 +103,7 @@ From the repository root:
 ./tests/validate-platform-layout.ps1
 ./tests/verify-installed-codex-hook.ps1
 claude plugin validate ./claude-code
+grok plugin validate ./grok
 python "$env:USERPROFILE/.codex/skills/.system/skill-creator/scripts/quick_validate.py" ./plugins/cheap-trick/skills/cheap-trick
 python "$env:USERPROFILE/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py" ./plugins/cheap-trick
 ```
