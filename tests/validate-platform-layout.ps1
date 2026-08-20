@@ -112,34 +112,18 @@ if (Test-Path -LiteralPath $grokSkillPath) {
     $failures.Add('Grok skill is missing.')
 }
 
-$grokHookPath = Join-Path $grokRoot 'hooks\cheap-trick-reminder.ps1'
-if (Test-Path -LiteralPath $grokHookPath) {
-    $hookJson = & $grokHookPath
-    try {
-        $hook = $hookJson | ConvertFrom-Json
-    } catch {
-        $failures.Add('Grok PowerShell hook does not emit valid JSON.')
-        $hook = $null
-    }
+Assert-True (-not (Test-Path -LiteralPath (Join-Path $grokRoot 'hooks'))) 'Grok package still contains a hooks folder (UserPromptSubmit is observe-only on Grok).'
 
-    if ($hook) {
-        $context = $hook.hookSpecificOutput.additionalContext
-        Assert-True ($hook.hookSpecificOutput.hookEventName -eq 'UserPromptSubmit') 'Grok hook emits the wrong event name.'
-        Assert-True ($context -match 'grok-4\.5') 'Grok hook omits grok-4.5 routing.'
-        Assert-True ($context -match 'spawn_subagent') 'Grok hook omits spawn_subagent.'
-        Assert-True ($context -match 'Never write haiku') 'Grok hook does not forbid Claude/Codex model names.'
-    }
+$grokRulesPath = Join-Path $grokRoot 'rules\cheap-trick.md'
+if (Test-Path -LiteralPath $grokRulesPath) {
+    $grokRules = Get-Content -LiteralPath $grokRulesPath -Raw -Encoding UTF8
+    Assert-True ($grokRules -match 'grok-4\.5') 'Grok rules file omits grok-4.5 routing.'
+    Assert-True ($grokRules -match 'spawn_subagent') 'Grok rules file omits spawn_subagent.'
 } else {
-    $failures.Add('Grok PowerShell hook is missing.')
+    $failures.Add('Grok rules file is missing.')
 }
 
-$grokHooksJsonPath = Join-Path $grokRoot 'hooks\hooks.json'
-if (Test-Path -LiteralPath $grokHooksJsonPath) {
-    $grokHooksJson = Get-Content -LiteralPath $grokHooksJsonPath -Raw -Encoding UTF8
-    Assert-True ($grokHooksJson -match 'GROK_PLUGIN_ROOT') 'Grok hooks.json does not use GROK_PLUGIN_ROOT.'
-} else {
-    $failures.Add('Grok hooks.json is missing.')
-}
+Assert-True (Test-Path -LiteralPath (Join-Path $grokRoot 'commands\cheap-trick-setup.md')) 'Grok setup command is missing.'
 
 if ($failures.Count -gt 0) {
     $failures | ForEach-Object { Write-Error $_ -ErrorAction Continue }

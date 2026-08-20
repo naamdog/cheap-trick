@@ -1,10 +1,19 @@
 {
   "name": "cheap-trick",
   "version": "0.2.0",
-  "description": "Always-on supervisor for multi-step work on Grok Build: grok-4.6 plans the split between what it must keep and what grok-4.5 can do, dispatches the grind with spawn_subagent, and stops to warn when delegating would lose session context. Activates automatically on every turn via a hook.",
-  "author": { "name": "Mike Naameh" },
+  "description": "Always-on supervisor for multi-step work on Grok Build: grok-4.6 plans the split between what it must keep and what grok-4.5 can do, dispatches the grind with spawn_subagent, and stops to warn when delegating would lose session context. Installs the skill, plus a one-time /cheap-trick-setup command that writes the always-on rules file.",
+  "author": {
+    "name": "Mike Naameh"
+  },
   "license": "MIT",
   "homepage": "https://github.com/naamdog/cheap-trick",
   "repository": "https://github.com/naamdog/cheap-trick",
-  "keywords": ["delegation", "sub-agents", "supervision", "cost-optimization", "hooks", "grok"]
+  "keywords": [
+    "delegation",
+    "sub-agents",
+    "supervision",
+    "cost-optimization",
+    "hooks",
+    "grok"
+  ]
 }

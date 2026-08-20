@@ -1,15 +1,26 @@
 {
   "name": "cheap-trick",
-  "owner": { "name": "Mike Naameh" },
+  "owner": {
+    "name": "Mike Naameh"
+  },
   "description": "Cost-aware model supervision for Grok Build. Separate Claude Code and Codex packages live in the same repository.",
   "plugins": [
     {
       "name": "cheap-trick",
-      "source": "./grok",
-      "description": "Always-on supervisor for multi-step work on Grok Build: keep judgement on grok-4.6, delegate grind to grok-4.5, and stop to warn when delegating would lose session context. Activates automatically via a UserPromptSubmit hook.",
+      "source": {
+        "type": "local",
+        "path": "./grok"
+      },
+      "description": "Always-on supervisor for multi-step work on Grok Build: keep judgement on grok-4.6, delegate grind to grok-4.5, and stop to warn when delegating would lose session context. Installs the skill, plus a one-time /cheap-trick-setup command that writes the always-on rules file.",
       "category": "productivity",
       "homepage": "https://github.com/naamdog/cheap-trick",
-      "keywords": ["cheap trick", "subagents", "delegation", "grok-4.5", "cost"]
+      "keywords": [
+        "cheap trick",
+        "subagents",
+        "delegation",
+        "grok-4.5",
+        "cost"
+      ]
     }
   ]
 }
