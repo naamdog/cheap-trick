@@ -26,9 +26,18 @@ function Assert-NormalizedHash {
         return
     }
 
-    $normalized = (Get-Content -LiteralPath $path) -join "`n"
+    # -Encoding UTF8 is required: Windows PowerShell 5.1 reads as ANSI by default,
+    # which corrupts every non-ASCII character and breaks the hash.
+    $normalized = (Get-Content -LiteralPath $path -Encoding UTF8) -join "`n"
     $bytes = [Text.Encoding]::UTF8.GetBytes($normalized)
-    $actual = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($bytes)).ToLowerInvariant()
+    # Instance SHA256 + BitConverter: works on Windows PowerShell 5.1 and PowerShell 7.
+    $sha = [Security.Cryptography.SHA256]::Create()
+    try {
+        $hashBytes = $sha.ComputeHash($bytes)
+    } finally {
+        $sha.Dispose()
+    }
+    $actual = ([BitConverter]::ToString($hashBytes) -replace '-', '').ToLowerInvariant()
     if ($actual -ne $ExpectedHash) {
         $failures.Add("Claude file changed unexpectedly: $RelativePath")
     }
@@ -52,7 +61,7 @@ Assert-NormalizedHash 'claude-code\hooks\cheap-trick-reminder.sh' '8158b9536168d
 
 $codexSkillPath = Join-Path $codexRoot 'skills\cheap-trick\SKILL.md'
 if (Test-Path -LiteralPath $codexSkillPath) {
-    $codexSkill = Get-Content -LiteralPath $codexSkillPath -Raw
+    $codexSkill = Get-Content -LiteralPath $codexSkillPath -Raw -Encoding UTF8
     Assert-True ($codexSkill -match 'live spawn allowlist') 'Codex skill does not require checking the live spawn allowlist.'
     Assert-True ($codexSkill -match 'reasoning_effort') 'Codex skill does not require explicit subagent reasoning effort.'
     Assert-True ($codexSkill -match 'fresh agent lacks session context') 'Codex skill does not enforce the fresh-context gate.'
@@ -92,7 +101,7 @@ if (Test-Path -LiteralPath $codexHookPath) {
 
 $grokSkillPath = Join-Path $grokRoot 'skills\cheap-trick\SKILL.md'
 if (Test-Path -LiteralPath $grokSkillPath) {
-    $grokSkill = Get-Content -LiteralPath $grokSkillPath -Raw
+    $grokSkill = Get-Content -LiteralPath $grokSkillPath -Raw -Encoding UTF8
     Assert-True ($grokSkill -match 'grok-4\.5') 'Grok skill does not route grind to grok-4.5.'
     Assert-True ($grokSkill -match 'grok-4\.6') 'Grok skill does not keep judgement on grok-4.6.'
     Assert-True ($grokSkill -match 'spawn_subagent') 'Grok skill does not dispatch with spawn_subagent.'
@@ -126,14 +135,14 @@ if (Test-Path -LiteralPath $grokHookPath) {
 
 $grokHooksJsonPath = Join-Path $grokRoot 'hooks\hooks.json'
 if (Test-Path -LiteralPath $grokHooksJsonPath) {
-    $grokHooksJson = Get-Content -LiteralPath $grokHooksJsonPath -Raw
+    $grokHooksJson = Get-Content -LiteralPath $grokHooksJsonPath -Raw -Encoding UTF8
     Assert-True ($grokHooksJson -match 'GROK_PLUGIN_ROOT') 'Grok hooks.json does not use GROK_PLUGIN_ROOT.'
 } else {
     $failures.Add('Grok hooks.json is missing.')
 }
 
 if ($failures.Count -gt 0) {
-    $failures | ForEach-Object { Write-Error $_ }
+    $failures | ForEach-Object { Write-Error $_ -ErrorAction Continue }
     exit 1
 }
 
