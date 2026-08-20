@@ -1,6 +1,6 @@
 {
   "name": "cheap-trick",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Always-on Codex model router for cost-aware subagent delegation, Spark-aware speed choices, and per-turn model and token estimates.",
   "author": {
     "name": "Mike Naameh",

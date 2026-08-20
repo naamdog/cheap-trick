@@ -1,6 +1,6 @@
 {
   "name": "cheap-trick",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Always-on supervisor for multi-step work on Grok Build: grok-4.6 plans the split between what it must keep and what grok-4.5 can do, dispatches the grind with spawn_subagent, and stops to warn when delegating would lose session context. Installs the skill, plus a one-time /cheap-trick-setup command that writes the always-on rules file.",
   "author": {
     "name": "Mike Naameh"
