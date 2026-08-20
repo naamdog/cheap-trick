@@ -1,10 +1,11 @@
 {
   "name": "cheap-trick",
   "owner": { "name": "Mike Naameh" },
+  "description": "Cost-aware model supervision for Claude Code, with a separate native Codex package in the same repository.",
   "plugins": [
     {
       "name": "cheap-trick",
-      "source": "./",
+      "source": "./claude-code",
       "description": "Always-on supervisor for multi-step work - plans the split between what to keep and what to delegate to cheaper sub-agents, and stops to warn when delegating would lose session context - activates automatically via a UserPromptSubmit hook."
     }
   ]

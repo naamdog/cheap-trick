@@ -1,0 +1,20 @@
+{
+  "name": "cheap-trick",
+  "interface": {
+    "displayName": "Cheap Trick"
+  },
+  "plugins": [
+    {
+      "name": "cheap-trick",
+      "source": {
+        "source": "local",
+        "path": "./plugins/cheap-trick"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

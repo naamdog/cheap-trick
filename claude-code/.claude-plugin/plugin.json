@@ -4,6 +4,5 @@
   "description": "Always-on supervisor for multi-step work: the top model plans the split between what it must keep and what a cheaper sub-agent can do, dispatches the grind accordingly, and stops to warn when delegating would lose session context or cost more than it saves. Activates automatically on every turn via a hook.",
   "author": { "name": "Mike Naameh" },
   "license": "MIT",
-  "category": "productivity",
   "keywords": ["delegation", "sub-agents", "supervision", "cost-optimization", "hooks"]
 }

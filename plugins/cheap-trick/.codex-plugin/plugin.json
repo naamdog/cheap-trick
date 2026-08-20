@@ -1,0 +1,36 @@
+{
+  "name": "cheap-trick",
+  "version": "0.2.1",
+  "description": "Always-on Codex model router for cost-aware subagent delegation, Spark-aware speed choices, and per-turn model and token estimates.",
+  "author": {
+    "name": "Mike Naameh",
+    "url": "https://github.com/naamdog"
+  },
+  "homepage": "https://github.com/naamdog/cheap-trick",
+  "repository": "https://github.com/naamdog/cheap-trick",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "delegation",
+    "subagents",
+    "model-routing",
+    "token-budget",
+    "spark"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Cheap Trick for Codex",
+    "shortDescription": "Route work to the right Codex model",
+    "longDescription": "Cheap Trick checks every Codex turn, keeps judgement and risky actions on the controller, delegates bounded work to lower-cost models, considers Spark when its speed profile fits, and reports estimated tokens for every model used.",
+    "developerName": "Mike Naameh",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive"
+    ],
+    "websiteURL": "https://github.com/naamdog/cheap-trick",
+    "defaultPrompt": [
+      "Plan this job with the cheapest safe model split"
+    ],
+    "brandColor": "#F4B400"
+  }
+}
